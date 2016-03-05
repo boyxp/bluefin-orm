@@ -1,5 +1,5 @@
 <?php
-namespace resultset;
+namespace bluefin\orm\resultset;
 use Countable;
 use Iterator;
 use ArrayAccess;

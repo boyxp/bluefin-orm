@@ -1,7 +1,7 @@
 <?php
-namespace query;
-use record\record;
-use resultset\resultset;
+namespace bluefin\orm\query;
+use bluefin\orm\record\record;
+use bluefin\orm\resultset\resultset;
 interface query
 {
 	public function insert(array $data):query;

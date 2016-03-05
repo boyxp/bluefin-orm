@@ -1,5 +1,5 @@
 <?php
-namespace record;
+namespace bluefin\orm\record;
 use Countable;
 use Iterator;
 use ArrayAccess;

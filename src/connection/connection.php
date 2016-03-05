@@ -1,5 +1,5 @@
 <?php
-namespace connection;
+namespace bluefin\orm\connection;
 interface connection
 {
 	public function begin():bool;

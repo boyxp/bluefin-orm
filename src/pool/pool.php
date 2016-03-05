@@ -1,6 +1,6 @@
 <?php
-namespace pool;
-use connection\connection;
+namespace bluefin\orm\pool;
+use bluefin\orm\connection\connection;
 interface pool
 {
 	public function __get(string $db):connection;

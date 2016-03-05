@@ -1,8 +1,8 @@
 <?php
-namespace model;
-use query\query;
-use record\record;
-use connection\connection;
+namespace bluefin\orm\model;
+use bluefin\orm\query\query;
+use bluefin\orm\record\record;
+use bluefin\orm\connection\connection;
 interface model
 {
 	public static function insert(array $data=null):record;
