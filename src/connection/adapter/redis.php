@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace bluefin\orm\connection\adapter;
 use bluefin\orm\connection\connection as connectionInterface;
 class redis implements connectionInterface
