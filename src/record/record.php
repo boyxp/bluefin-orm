@@ -9,4 +9,5 @@ interface record extends Countable,Iterator,ArrayAccess
 	public function __set(string $column, $value);
 	public function save():string;
 	public function delete():bool;
+	public function execute():string;
 }
