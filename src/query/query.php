@@ -1,7 +1,5 @@
 <?php
 namespace bluefin\orm\query;
-use bluefin\orm\record\record;
-use bluefin\orm\resultset\resultset;
 interface query
 {
 	public function insert(array $data):query;
@@ -13,8 +11,8 @@ interface query
 	public function group(string $fields):query;
 	public function having(string $condition, array $bind=null):query;
 	public function order(string $field, string $direction='ASC'):query;
-	public function limit(int $offset, int $rows):query;
-	public function fetch():record;
-	public function fetchAll():resultset;
+	public function limit(int $rows, int $offset=0):query;
+	public function fetch($record=false);
+	public function fetchAll($resultset=false);
 	public function execute():string;
 }
