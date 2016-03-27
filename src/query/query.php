@@ -9,7 +9,7 @@ interface query
 	public function delete(array $data=null):query;
 	public function select(string $columns='*'):query;
 	public function from():query;
-	public function where(string $condition, array $bind=null):query;
+	public function where($condition, array $bind=null):query;
 	public function group(string $fields):query;
 	public function having(string $condition, array $bind=null):query;
 	public function order(string $field, string $direction='ASC'):query;
