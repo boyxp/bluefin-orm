@@ -19,7 +19,7 @@ class model extends \injector implements modelInterface
 	public static function insert(array $data=null):record
 	{
 		$query = static::_getQueryInstance();
-		return static::$_locator->make('record', array($query, $data));
+		return static::$_locator->make('record', array($data, $query));
 	}
 
 	public static function select(string $columns='*'):query
