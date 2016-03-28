@@ -14,7 +14,7 @@ class model extends \injector implements modelInterface
 	const TABLE    = '';
 	const KEY      = '';
 
-	private static $_query = [];
+	protected static $_query = [];
 
 	public static function insert(array $data=null):record
 	{
