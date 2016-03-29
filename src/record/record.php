@@ -10,4 +10,5 @@ interface record extends Countable,Iterator,ArrayAccess
 	public function save():string;
 	public function delete():bool;
 	public function execute():string;
+	public function toArray():array;
 }
