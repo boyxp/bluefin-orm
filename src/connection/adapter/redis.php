@@ -33,11 +33,11 @@ class redis implements connectionInterface
 		foreach($args as $arg) {
 			if(is_array($arg)) {
 				foreach($arg as $v) {
-					$params .= sprintf("$%u\r\n%s\r\n", strlen($v), $v);
+					$params .= sprintf("$%u\r\n%s\r\n", strlen(strval($v)), $v);
 					$i++;
 				}
 			} else {
-				$params .= sprintf("$%u\r\n%s\r\n", strlen($arg), $arg);
+				$params .= sprintf("$%u\r\n%s\r\n", strlen(strval($arg)), $arg);
 				$i++;
 			}
 		}
