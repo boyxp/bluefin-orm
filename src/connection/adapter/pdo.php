@@ -15,7 +15,7 @@ class pdo extends \PDO implements connectionInterface
 		}
 
 		try {
-			parent::__construct($dsn, $user, $password, array(\PDO::ATTR_PERSISTENT => true));
+			parent::__construct($dsn, $user, $password, array(\PDO::ATTR_PERSISTENT => false));
 		} catch (exception $e) {
 			throw new \InvalidArgumentException('Connection failed: '.$e->getMessage(), $e->getCode());
 		}
