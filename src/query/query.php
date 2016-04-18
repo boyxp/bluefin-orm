@@ -12,7 +12,7 @@ interface query
 	public function having(string $condition, array $bind=null):query;
 	public function order(string $field, string $direction='ASC'):query;
 	public function limit(int $rows, int $offset=0):query;
-	public function fetch($record=false);
-	public function fetchAll($resultset=false);
+	public function fetch(bool $record=false);
+	public function fetchAll(bool $resultset=false);
 	public function execute():string;
 }

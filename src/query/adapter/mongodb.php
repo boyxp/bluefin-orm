@@ -205,7 +205,7 @@ class mongodb extends \injector implements queryInterface
 		return $this;
 	}
 
-	public function fetch($record=false)
+	public function fetch(bool $record=false)
 	{
 		$this->_offset = 0;
 		$this->_count  = 1;
@@ -222,7 +222,7 @@ class mongodb extends \injector implements queryInterface
 		}
 	}
 
-	public function fetchAll($resultset=false)
+	public function fetchAll(bool $resultset=false)
 	{
 		$connection = $this->_model->getSlave();
 		$manager    = $connection->getManager();
