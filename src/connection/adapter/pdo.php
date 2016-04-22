@@ -23,7 +23,7 @@ class pdo extends \PDO implements connectionInterface
 		$this->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		$this->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
-		$timezone = isset($options['timezone']) ? $options['timezone'] : '+08:00';
+		$timezone = isset($options['timezone']) ? $options['timezone'] : '+00:00';
 		$this->exec("SET time_zone='{$timezone}'");
 		$this->exec("SET NAMES '{$charset}'");
 	}
