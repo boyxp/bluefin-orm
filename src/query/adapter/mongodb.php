@@ -23,6 +23,7 @@ class mongodb extends \injector implements queryInterface
 	private $_condition = '_id is not null';
 	private $_bind      = [];
 	private $_aggregate = null;
+	private $_distinct  = null;
 	private $_group     = '';
 	private $_having    = '';
 	private $_order     = [];
@@ -101,22 +102,29 @@ class mongodb extends \injector implements queryInterface
 	{
 		if($this->_state >= 1) { throw new \LogicException('syntax error', 2001); }
 
-		if(strpos($columns, '(')!==false and preg_match_all('/(?:,|^|\s)(avg|count|max|min|sum)\s*\(([^\(\)]+)\)\s*(?:as\s+([a-z0-9_]+))?/i', $columns, $matches)) {
+		if(strpos($columns, '(')!==false and preg_match_all('/(?:,|^|\s)(avg|count|max|min|sum|distinct)\s*\(([^\(\)]+)\)\s*(?:as\s+([a-z0-9_]+))?/i', $columns, $matches)) {
 			$aggregate = [];
 			foreach($matches[1] as $key=>$function) {
 				$field = $matches[2][$key];
 				$as    = empty($matches[3][$key]) ? $function : $matches[3][$key];
 				if($function==='count') {
 					$aggregate[$as] = array('$sum'=>1);
+
+				} elseif($function==='distinct') {
+					$aggregate[$as]  = array('$sum'=>1);
+					$this->_group    = array($field=>'$'.$field);
+					$this->_distinct = $field;
+
 				} else {
 					$aggregate[$as] = array("\${$function}"=>"\${$field}");
 				}
 			}
-			$this->_aggregate = $aggregate;
 
-			$this->_record = false;
+			$this->_aggregate = $aggregate;
+			$this->_record    = false;
+
 		} else {
-			$this->_record = true;
+			$this->_record    = true;
 			if($columns!=='*') {
 				$fields = explode(',', $columns);
 				$this->_columns = [];
@@ -156,7 +164,7 @@ class mongodb extends \injector implements queryInterface
 
 	public function group(string $fields):queryInterface
 	{
-		if($this->_record or $this->_state >= 4) {
+		if($this->_record or $this->_distinct or $this->_state >= 4) {
 			throw new \LogicException('syntax error');
 		}
 
@@ -251,7 +259,7 @@ class mongodb extends \injector implements queryInterface
 				$result[] = $this->_stdToArray($row);
 			}
 
-		} else {
+		} elseif($this->_aggregate) {
 			$ops = array(array('$match'=>$where));
 
 			$this->_aggregate['_id'] = $this->_group ? $this->_group : null;
@@ -281,7 +289,7 @@ class mongodb extends \injector implements queryInterface
 				foreach($cursor as $key=>$row) {
 					$row = (array)$row;
 					$row = array_merge((array)$row['_id'], $row);
-					unset($row['_id']);
+					unset($row['_id'], $row['distinct']);
 					$result[$key] = $this->_stdToArray($row);
 				}
 			} else {
@@ -291,6 +299,9 @@ class mongodb extends \injector implements queryInterface
 					$result[$key] = $this->_stdToArray($row);
 				}
 			}
+
+		} else {
+			throw new \LogicException('syntax error');
 		}
 
 		$this->_reset();
@@ -502,6 +513,7 @@ class mongodb extends \injector implements queryInterface
 		$this->_condition= '_id is not null';
 		$this->_bind     = [];
 		$this->_aggregate= null;
+		$this->_distinct = null;
 		$this->_group    = '';
 		$this->_having   = '';
 		$this->_order    = [];
