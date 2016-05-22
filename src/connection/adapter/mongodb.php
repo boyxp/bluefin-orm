@@ -4,7 +4,6 @@ namespace bluefin\orm\connection\adapter;
 use bluefin\orm\connection\connection as connectionInterface;
 class mongodb implements connectionInterface
 {
-	protected static $_connection = array();
 	protected $_manager  = null;
 	protected $_database = null;
 
@@ -23,15 +22,15 @@ class mongodb implements connectionInterface
 		}
 
 		try {
-			if(!isset(static::$_connection[$dsn])) {
-				static::$_connection[$dsn] = new \MongoDB\Driver\Manager($dsn, $options);
-			}
+			$manager = new \MongoDB\Driver\Manager($dsn, $options);
+			$command = new \MongoDB\Driver\Command(['ping' => 1]);
+			$manager->executeCommand('db', $command);
 
-			$this->_manager = static::$_connection[$dsn];
-
-		} catch (exception $e) {
+		} catch (\exception $e) {
 			throw new \InvalidArgumentException('Connection failed: '.$e->getMessage(), $e->getCode());
 		}
+
+		$this->_manager = $manager;
 	}
 
 	public function getManager()
