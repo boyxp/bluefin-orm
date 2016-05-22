@@ -18,6 +18,10 @@ class mongodb implements connectionInterface
 			$this->_database = 'development';
 		}
 
+		if(!isset($options['maxPoolSize'])) {
+			$options['maxPoolSize'] = 10;
+		}
+
 		try {
 			if(!isset(static::$_connection[$dsn])) {
 				static::$_connection[$dsn] = new \MongoDB\Driver\Manager($dsn, $options);
