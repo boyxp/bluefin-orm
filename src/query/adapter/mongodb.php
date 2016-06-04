@@ -220,7 +220,7 @@ class mongodb extends \injector implements queryInterface
 
 		$result = $this->fetchAll(false);
 		if(!isset($result[0])) {
-			return null;
+			return [];
 		} elseif($record===false) {
 			return $result[0];
 		} elseif($this->_record===false) {
@@ -307,7 +307,7 @@ class mongodb extends \injector implements queryInterface
 		$this->_reset();
 
 		if(!isset($result[0])) {
-			return null;
+			return [];
 		} elseif($resultset===false) {
 			return $result;
 		} elseif($this->_record===false) {
