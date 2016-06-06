@@ -44,7 +44,7 @@ class mongodb extends \injector implements queryInterface
 		$this->_model    = $model;
 		$this->_database = $model->getDatabase();
 		$this->_table    = $model->getTable();
-		$this->_registry = static::$_locator->make('registry', array('mongodb:SQL'));
+		$this->_registry = static::$locator->make('registry', array('mongodb:SQL'));
 	}
 
 	public function insert(array $data):queryInterface
@@ -224,9 +224,9 @@ class mongodb extends \injector implements queryInterface
 		} elseif($record===false) {
 			return $result[0];
 		} elseif($this->_record===false) {
-			return static::$_locator->make('record', [$result[0]]);
+			return static::$locator->make('record', [$result[0]]);
 		} else {
-			return static::$_locator->make('record', [$result[0], $this]);
+			return static::$locator->make('record', [$result[0], $this]);
 		}
 	}
 
@@ -311,9 +311,9 @@ class mongodb extends \injector implements queryInterface
 		} elseif($resultset===false) {
 			return $result;
 		} elseif($this->_record===false) {
-			return static::$_locator->make('resultset', [$result]);
+			return static::$locator->make('resultset', [$result]);
 		} else {
-			return static::$_locator->make('resultset', [$result, $this]);
+			return static::$locator->make('resultset', [$result, $this]);
 		}
 	}
 

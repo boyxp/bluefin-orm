@@ -19,7 +19,7 @@ class model extends \injector implements modelInterface
 	public static function insert(array $data=null):record
 	{
 		$query = static::_getQueryInstance();
-		return static::$_locator->make('record', array($data, $query));
+		return static::$locator->make('record', array($data, $query));
 	}
 
 	public static function select(string $columns='*'):query
@@ -44,12 +44,12 @@ class model extends \injector implements modelInterface
 
 	public static function getMaster():connection
 	{
-		return static::$_locator->get(static::MASTER);
+		return static::$locator->get(static::MASTER);
 	}
 
 	public static function getSlave():connection
 	{
-		return static::$_locator->get(static::SLAVE);
+		return static::$locator->get(static::SLAVE);
 	}
 
 	public static function getDatabase():string
@@ -71,7 +71,7 @@ class model extends \injector implements modelInterface
 	{
 		if(!isset(static::$_query[static::class])) {
 			$driver = static::getDriver();
-			static::$_query[static::class] = static::$_locator->make("query_{$driver}", array(new static));
+			static::$_query[static::class] = static::$locator->make("query_{$driver}", array(new static));
 		}
 
 		return static::$_query[static::class];

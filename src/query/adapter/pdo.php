@@ -183,9 +183,9 @@ class pdo extends \injector implements queryInterface
 		} elseif($record===false) {
 			return $result[0];
 		} elseif($this->_record===false) {
-			return static::$_locator->make('record', [$result[0]]);
+			return static::$locator->make('record', [$result[0]]);
 		} else {
-			return static::$_locator->make('record', [$result[0], $this]);
+			return static::$locator->make('record', [$result[0], $this]);
 		}
 	}
 
@@ -204,9 +204,9 @@ class pdo extends \injector implements queryInterface
 		} elseif($resultset===false) {
 			return $result;
 		} elseif($this->_record===false) {
-			return static::$_locator->make('resultset', [$result]);
+			return static::$locator->make('resultset', [$result]);
 		} else {
-			return static::$_locator->make('resultset', [$result, $this]);
+			return static::$locator->make('resultset', [$result, $this]);
 		}
 	}
 

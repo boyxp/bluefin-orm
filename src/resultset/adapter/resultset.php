@@ -86,7 +86,7 @@ class resultset extends \injector implements resultsetInterface
 	public function current()
 	{
 		if(!isset($this->_record[$this->_positon])) {
-			$this->_record[$this->_positon] = static::$_locator->make('record', array($this->_data[$this->_positon], $this->_query));
+			$this->_record[$this->_positon] = static::$locator->make('record', array($this->_data[$this->_positon], $this->_query));
 		}
 
 		return $this->_record[$this->_positon];
@@ -140,7 +140,7 @@ class resultset extends \injector implements resultsetInterface
 		}
 
 		if(!isset($this->_record[$offset])) {
-			$this->_record[$offset] = static::$_locator->make('record', array($this->_data[$offset], $this->_query));
+			$this->_record[$offset] = static::$locator->make('record', array($this->_data[$offset], $this->_query));
 		}
 
 		return $this->_record[$offset];
