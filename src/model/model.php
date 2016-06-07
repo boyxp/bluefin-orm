@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace bluefin\orm\model;
 use bluefin\orm\query\query;
 use bluefin\orm\record\record;
