@@ -9,14 +9,14 @@ class redis implements connectionInterface
 	private $_port     = null;
 	private $_password = null;
 
-	public function __construct($host='127.0.0.1', $port=6379, $password=null)
+	public function __construct(string $host='127.0.0.1', int $port=6379, string $password=null)
 	{
 		$this->_host     = $host;
 		$this->_port     = $port;
 		$this->_password = $password;
 	}
 
-	public function __call($command, array $args)
+	public function __call(string $command, array $args)
 	{
 		if(!$this->_socket) {
 			$socket = @fsockopen($this->_host, $this->_port, $errno, $error, 5);
