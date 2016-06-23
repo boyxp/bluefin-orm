@@ -19,7 +19,7 @@ class model extends \injector implements modelInterface
 	public static function insert(array $data=null):record
 	{
 		$query = static::_getQueryInstance();
-		return static::$locator->make('record', array($data, $query));
+		return static::$locator->make('record', [$data, $query]);
 	}
 
 	public static function select(string $columns='*'):query
@@ -71,7 +71,7 @@ class model extends \injector implements modelInterface
 	{
 		if(!isset(static::$_query[static::class])) {
 			$driver = static::getDriver();
-			static::$_query[static::class] = static::$locator->make("query_{$driver}", array(new static));
+			static::$_query[static::class] = static::$locator->make("query_{$driver}", [new static]);
 		}
 
 		return static::$_query[static::class];
