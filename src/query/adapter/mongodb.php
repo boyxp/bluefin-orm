@@ -44,7 +44,7 @@ class mongodb extends \injector implements queryInterface
 		$this->_model    = $model;
 		$this->_database = $model->getDatabase();
 		$this->_table    = $model->getTable();
-		$this->_registry = static::$locator->make('registry', array('mongodb:SQL'));
+		$this->_registry = static::$locator->make('registry', ['MONGODB:SQL']);
 	}
 
 	public function insert(array $data):queryInterface
@@ -74,7 +74,7 @@ class mongodb extends \injector implements queryInterface
 
 			$this->_data = $data;
 
-			return $this->where('_id=?', array($key));
+			return $this->where('_id=?', [$key]);
 		} else {
 			$this->_data  = $data;
 			$this->_state = 2;
@@ -90,7 +90,7 @@ class mongodb extends \injector implements queryInterface
 		$this->_type = static::DELETE;
 
 		if(isset($data['_id'])) {
-			return $this->where('_id=?', array($data['_id']));
+			return $this->where('_id=?', [$data['_id']]);
 		}
 
 		$this->_state = 2;
@@ -108,15 +108,15 @@ class mongodb extends \injector implements queryInterface
 				$field = $matches[2][$key];
 				$as    = empty($matches[3][$key]) ? $function : $matches[3][$key];
 				if($function==='count') {
-					$aggregate[$as] = array('$sum'=>1);
+					$aggregate[$as] = ['$sum'=>1];
 
 				} elseif($function==='distinct') {
-					$aggregate[$as]  = array('$sum'=>1);
-					$this->_group    = array($field=>'$'.$field);
+					$aggregate[$as]  = ['$sum'=>1];
+					$this->_group    = [$field=>'$'.$field];
 					$this->_distinct = $field;
 
 				} else {
-					$aggregate[$as] = array("\${$function}"=>"\${$field}");
+					$aggregate[$as]  = ["\${$function}"=>"\${$field}"];
 				}
 			}
 
@@ -260,29 +260,29 @@ class mongodb extends \injector implements queryInterface
 			}
 
 		} elseif($this->_aggregate) {
-			$ops = array(array('$match'=>$where));
+			$ops = [['$match'=>$where]];
 
 			$this->_aggregate['_id'] = $this->_group ? $this->_group : null;
-			$ops[] = array('$group'=>$this->_aggregate);
+			$ops[] = ['$group'=>$this->_aggregate];
 
 			if($this->_having) {
 				$tree   = $this->_parse($this->_having);
 				$having = $this->_bind($tree, $this->_bind);
-				$ops[]  = array('$match'=>$having);
+				$ops[]  = ['$match'=>$having];
 			}
 
 			if(!empty($this->_order)) {
-				$ops[] = array('$sort'=>$this->_order);
+				$ops[] = ['$sort'=>$this->_order];
 			}
 
-			$ops[] = array('$skip' =>$this->_offset);
-			$ops[] = array('$limit'=>$this->_count);
+			$ops[] = ['$skip' =>$this->_offset];
+			$ops[] = ['$limit'=>$this->_count];
 
-			$command = new Command(array(
+			$command = new Command([
 				'aggregate' => $this->_table,
 				'pipeline'  => $ops,
 				'cursor'    => new \stdClass,
-			));
+			]);
 
 			$cursor = $manager->executeCommand($database, $command)->toArray();
 			if($this->_group) {
@@ -328,11 +328,11 @@ class mongodb extends \injector implements queryInterface
 		if($this->_type!==static::INSERT) {
 			$tree     = $this->_parse($this->_condition);
 			$criteria = $this->_bind($tree, $this->_bind);
-			$query    = new MongoQuery($criteria, array(
+			$query    = new MongoQuery($criteria, [
 						'projection' => array('_id'=>1),
 						'skip'       => 0,
 						'limit'      => $this->_count,
-			));
+			]);
 			$cursor   = $manager->executeQuery($collection, $query)->toArray();
 
 			if(count($cursor)>0) {
@@ -340,7 +340,7 @@ class mongodb extends \injector implements queryInterface
 				foreach($cursor as $row) {
 					$keys[] = $row->_id;
 				}
-				$criteria = array('_id'=>array('$in'=>$keys));
+				$criteria = ['_id'=>['$in'=>$keys]];
 			} else {
 				$this->_reset();
 				return '0';
@@ -354,11 +354,11 @@ class mongodb extends \injector implements queryInterface
 					$result = $this->_data['_id'];
 					break;
 			case static::UPDATE :
-					$bulk->update($criteria, array('$set'=>$this->_data), array('multi'=>true));
+					$bulk->update($criteria, ['$set'=>$this->_data], ['multi'=>true]);
 					$result = $manager->executeBulkWrite($collection, $bulk)->getModifiedCount();
 					break;
 			case static::DELETE :
-					$bulk->delete($criteria, array('limit'=>0));
+					$bulk->delete($criteria, ['limit'=>0]);
 					$result = $manager->executeBulkWrite($collection, $bulk)->getDeletedCount();
 					break;
 			default             :
@@ -398,11 +398,11 @@ class mongodb extends \injector implements queryInterface
 						break;
 					}
 			case 'integer':
-					$bind      = array($condition);
+					$bind      = [$condition];
 					$condition = '_id=?';
 					break;
 			case 'array'  :
-					$bind      = array($condition);
+					$bind      = [$condition];
 					$condition = '_id IN(?)';
 					break;
 			default      :
@@ -410,7 +410,7 @@ class mongodb extends \injector implements queryInterface
 			break;
 		}
 
-		return array('condition'=>$condition, 'bind'=>$bind);
+		return ['condition'=>$condition, 'bind'=>$bind];
 	}
 
 	protected function _bind(array &$tree, array &$bind=null)
@@ -454,13 +454,13 @@ class mongodb extends \injector implements queryInterface
 					$longitude = floatval(array_shift($value));
 					$latitude  = floatval(array_shift($value));
 					$distance  = count($value)===0 ? 2000 : intval(array_shift($value));
-					$value     = array(
-						'$geometry'   => array(
+					$value     = [
+						'$geometry'   => [
 							'type'        => 'Point',
-							'coordinates' => array($longitude, $latitude)
-						),
+							'coordinates' => [$longitude, $latitude],
+						],
 						'$maxDistance'=> $distance,
-					);
+					];
 				}
 				$tree[$key] = $value;
 			} elseif($key==='$exists') {

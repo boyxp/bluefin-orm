@@ -278,7 +278,7 @@ class pdo extends \injector implements queryInterface
 						break;
 					}
 			case 'integer':
-					$bind      = array($condition);
+					$bind      = [$condition];
 					$condition = $this->_key.'=?';
 					break;
 			case 'array'  :
@@ -290,7 +290,7 @@ class pdo extends \injector implements queryInterface
 			break;
 		}
 
-		return array('condition'=>$condition, 'bind'=>$bind);
+		return ['condition'=>$condition, 'bind'=>$bind];
 	}
 
 	private function _reset()

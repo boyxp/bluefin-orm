@@ -112,12 +112,12 @@ class parser
 							throw new \InvalidArgumentException('syntax error');
 						break;
 					}
-					$conds[] = $oprts==='$eq' ? array($key=>$value) : array($key=>array($oprts=>$value));
+					$conds[] = $oprts==='$eq' ? [$key=>$value] : [$key=>[$oprts=>$value]];
 				break;
 				case 3 :
 					switch(strtolower($token)) {
 						case ')' :
-							return array('logical'=>$logical, 'conds'=>$conds);
+							return ['logical'=>$logical, 'conds'=>$conds];
 						break;
 						case 'and' :
 							$logical = '$and';
@@ -139,6 +139,6 @@ class parser
 			$state++;
 		}
 
-		return array('logical'=>$logical, 'conds'=>$conds);
+		return ['logical'=>$logical, 'conds'=>$conds];
 	}
 }
