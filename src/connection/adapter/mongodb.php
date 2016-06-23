@@ -7,7 +7,7 @@ class mongodb implements connectionInterface
 	protected $_manager  = null;
 	protected $_database = null;
 
-	public function __construct(string $dsn, array $options=null)
+	public function __construct(string $dsn='mongodb://localhost:27017', array $options=null)
 	{
 		$options = $options===null ? array('w'=>1) : $options;
 
