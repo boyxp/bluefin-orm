@@ -4,7 +4,7 @@ namespace bluefin\orm\connection\adapter;
 use bluefin\orm\connection\connection as connectionInterface;
 class pdo extends \PDO implements connectionInterface
 {
-	public function __construct(string $dsn, string $user='', string $password='', array $options=null)
+	public function __construct(string $dsn='mysql://localhost:3306', string $user='root', string $password='', array $options=null)
 	{
 		if(strpos(strtolower($dsn), 'charset=')!==false) {
 			preg_match('/charset=([a-z0-9-]+)/i', $dsn, $match);
